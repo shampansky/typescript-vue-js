@@ -4,6 +4,10 @@ import ArrowCircleRight from "@/assets/icons/arrow-circle-right.svg";
 import type Emoji from "@/types/Emoji";
 import { ref, computed } from "vue";
 
+defineEmits<{
+  (e: "@create", entry: { text: string; emoji: Emoji | null }): void;
+}>();
+
 const text = ref("");
 const emoji = ref<Emoji | null>(null);
 const charCount = computed<number>(() => {
@@ -22,7 +26,7 @@ const handleTextInput = (e: Event) => {
 };
 </script>
 <template>
-  <form class="entry-form" @submit.prevent>
+  <form class="entry-form" @submit.prevent="$emit('@create', { text, emoji })">
     <textarea
       :value="text"
       @input="handleTextInput"
