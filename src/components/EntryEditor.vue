@@ -3,7 +3,7 @@ import EmojiField from "@/components/EmojiField.vue";
 import ArrowCircleRight from "@/assets/icons/arrow-circle-right.svg";
 import type Emoji from "@/types/Emoji";
 import type Entry from "@/types/Entry";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 
 const emit = defineEmits<{
   (e: "@create", entry: Entry): void;
@@ -37,6 +37,12 @@ const handleSubmit = () => {
   body.value = "";
   emoji.value = null;
 };
+
+const textArea = ref<HTMLTextAreaElement | null>(null);
+
+onMounted(() => {
+  textArea.value?.focus();
+});
 </script>
 <template>
   <form class="entry-form" @submit.prevent="handleSubmit">
@@ -44,6 +50,7 @@ const handleSubmit = () => {
       :value="body"
       @input="handleTextInput"
       placeholder="New Journal Entry for danielkelly_io"
+      ref="textArea"
     ></textarea>
     <EmojiField v-model="emoji" />
     <div class="entry-form-footer">
