@@ -5,7 +5,7 @@ import type Emoji from "@/types/Emoji";
 import type Entry from "@/types/Entry";
 import { ref, computed } from "vue";
 
-defineEmits<{
+const emit = defineEmits<{
   (e: "@create", entry: Entry): void;
 }>();
 
@@ -25,20 +25,21 @@ const handleTextInput = (e: Event) => {
     console.log(body.value);
   }
 };
+
+const handleSubmit = () => {
+  emit("@create", {
+    body: body.value,
+    emoji: emoji.value,
+    createdAt: new Date(),
+    userId: 1,
+    id: Math.random(),
+  });
+  body.value = "";
+  emoji.value = null;
+};
 </script>
 <template>
-  <form
-    class="entry-form"
-    @submit.prevent="
-      $emit('@create', {
-        body,
-        emoji,
-        createdAt: new Date(),
-        userId: 1,
-        id: Math.random(),
-      })
-    "
-  >
+  <form class="entry-form" @submit.prevent="handleSubmit">
     <textarea
       :value="body"
       @input="handleTextInput"
