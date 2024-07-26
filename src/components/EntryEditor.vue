@@ -4,10 +4,15 @@ import ArrowCircleRight from "@/assets/icons/arrow-circle-right.svg";
 import type Emoji from "@/types/Emoji";
 import type Entry from "@/types/Entry";
 import { ref, computed, onMounted } from "vue";
+import { inject } from "vue";
+import { userInjectionKey } from "@/keys";
 
 const emit = defineEmits<{
   (e: "@create", entry: Entry): void;
 }>();
+
+const injectedUser = inject(userInjectionKey);
+console.log(injectedUser?.username);
 
 const body = ref("");
 const emoji = ref<Emoji | null>(null);
@@ -49,7 +54,7 @@ onMounted(() => {
     <textarea
       :value="body"
       @input="handleTextInput"
-      placeholder="New Journal Entry for danielkelly_io"
+      :placeholder="`New Journal Entry for ${injectedUser?.username || 'anonymous'}`"
       ref="textArea"
     ></textarea>
     <EmojiField v-model="emoji" />
